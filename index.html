@@ -11,14 +11,18 @@
     <script>
         async function getUserInfo() {
             const response = await fetch('/.auth/me');
-            const data = await response.json();
-            const user = data[0].user_claims.find(claim => claim.typ === 'name');
-            const email = data[0].user_claims.find(claim => claim.typ === 'emails');
-            
-            if (email.val === 'pmwood@gmail.com') {
-                document.getElementById('user-info').innerHTML = `<p>Hello, ${user.val}!</p>`;
+            if (response.ok) {
+                const data = await response.json();
+                const user = data[0].user_claims.find(claim => claim.typ === 'name');
+                const email = data[0].user_claims.find(claim => claim.typ === 'emails');
+                
+                if (email.val === 'pmwood@gmail.com') {
+                    document.getElementById('user-info').innerHTML = `<p>Hello, ${user.val}!</p>`;
+                } else {
+                    document.getElementById('user-info').innerHTML = `<p>Access Denied</p>`;
+                }
             } else {
-                document.getElementById('user-info').innerHTML = `<p>Access Denied</p>`;
+                window.location.href = '/login';
             }
         }
         
