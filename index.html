@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Web App with Google Authentication</title>
+</head>
+<body>
+    <h1>Welcome to the Static Web App</h1>
+    <div id="user-info"></div>
+    <script>
+        async function getUserInfo() {
+            const response = await fetch('/.auth/me');
+            const data = await response.json();
+            const user = data[0].user_claims.find(claim => claim.typ === 'name');
+            const email = data[0].user_claims.find(claim => claim.typ === 'emails');
+            
+            if (email.val === 'pmwood@gmail.com') {
+                document.getElementById('user-info').innerHTML = `<p>Hello, ${user.val}!</p>`;
+            } else {
+                document.getElementById('user-info').innerHTML = `<p>Access Denied</p>`;
+            }
+        }
+        
+        getUserInfo();
+    </script>
+</body>
+</html>
